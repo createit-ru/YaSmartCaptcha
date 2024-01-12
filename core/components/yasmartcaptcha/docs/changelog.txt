@@ -1,0 +1,5 @@
+Changelog for YaSmartCaptcha.
+
+1.0.0-alpha
+==============
+- First release
