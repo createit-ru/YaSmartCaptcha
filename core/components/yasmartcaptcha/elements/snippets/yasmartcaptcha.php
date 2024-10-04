@@ -15,7 +15,7 @@ if (!$YaSmartCaptcha) {
     return false;
 }
 
-if (isset($formit) && isset($hook)) {
+if ((isset($formit) || isset($login)) && isset($hook)) {
     // FormIt hook
     $modx->lexicon->load('yasmartcaptcha:default');
 
