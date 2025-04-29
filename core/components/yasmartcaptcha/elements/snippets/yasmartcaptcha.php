@@ -16,6 +16,9 @@ if (!$YaSmartCaptcha) {
 }
 
 if ((isset($formit) || isset($login)) && isset($hook)) {
+    if (!$YaSmartCaptcha->enabled()) {
+        return true;
+    }
     // FormIt hook
     $modx->lexicon->load('yasmartcaptcha:default');
 
@@ -31,10 +34,12 @@ if ((isset($formit) || isset($login)) && isset($hook)) {
         $hook->addError('smart-token', $modx->lexicon('yasmartcaptcha_validate_failed'));
         $hook->addError('yasmartcaptcha', $modx->lexicon('yasmartcaptcha_validate_failed'));
     }
-
     return $validationResult;
 } else {
     // Render captcha
+    if (!$YaSmartCaptcha->enabled()) {
+        return '';
+    }
     $YaSmartCaptcha->initialize($modx->context->get('key'), $scriptProperties);
     $tpl = $modx->getOption('tpl', $scriptProperties, 'tpl.YaSmartCaptcha');
     return $modx->getChunk($tpl, [

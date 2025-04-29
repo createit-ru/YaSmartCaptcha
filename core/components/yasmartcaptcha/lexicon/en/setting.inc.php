@@ -2,6 +2,9 @@
 
 $_lang['area_yasmartcaptcha_main'] = 'Main';
 
+$_lang['setting_yasmartcaptcha_enabled'] = 'Enable captcha';
+$_lang['setting_yasmartcaptcha_enabled_desc'] = 'You can globally enable or disable captcha on the site, including its rendering on pages and checking in hooks.';
+
 $_lang['setting_yasmartcaptcha_js'] = 'JS script for Yandex SmartCaptcha service';
 $_lang['setting_yasmartcaptcha_js_desc'] = 'The component will add this script to the page. If you add the script manually, clear this field.';
 

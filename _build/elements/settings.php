@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'enabled' => [
+        'xtype' => 'combo-boolean',
+        'value' => true,
+        'area' => 'yasmartcaptcha_main',
+    ],
     'service_js' => [
         'xtype' => 'textfield',
         'value' => 'https://smartcaptcha.yandexcloud.net/captcha.js',

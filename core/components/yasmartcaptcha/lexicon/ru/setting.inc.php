@@ -2,6 +2,9 @@
 
 $_lang['area_yasmartcaptcha_main'] = 'Основные';
 
+$_lang['setting_yasmartcaptcha_enabled'] = 'Капча включена';
+$_lang['setting_yasmartcaptcha_enabled_desc'] = 'Вы можете глобально включать или выключать капчу на сайте, включая её рендеринг на страницах и проверку в hooks.';
+
 $_lang['setting_yasmartcaptcha_service_js'] = 'JS-скрипт сервиса Yandex SmartCaptcha';
 $_lang['setting_yasmartcaptcha_service_js_desc'] = 'Компонент подключит этот скрипт на страницу. Если подключаете вручную - очистите это поле.';
 

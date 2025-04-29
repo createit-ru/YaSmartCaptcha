@@ -2,14 +2,10 @@
 
 class YaSmartCaptcha
 {
-    /** @var modX $modx */
-    public $modx;
-
-    /** @var array $config */
-    private $config;
-
-    /** @var array $initialized */
-    private $initialized = [];
+    public modX $modx;
+    private array $config;
+    private array $initialized = [];
+    private bool $enabled;
 
     /**
      * @param modX $modx
@@ -20,6 +16,8 @@ class YaSmartCaptcha
         $this->modx =& $modx;
         $corePath = MODX_CORE_PATH . 'components/yasmartcaptcha/';
         $assetsUrl = MODX_ASSETS_URL . 'components/yasmartcaptcha/';
+
+        $this->enabled = $this->modx->getOption('yasmartcaptcha_enabled', null, true);
 
         $this->config = array_merge([
             'assetsUrl' => $assetsUrl,
@@ -56,7 +54,7 @@ class YaSmartCaptcha
                     $placeholders = $this->makePlaceholders($this->config);
 
                     $serviceJS = trim($this->modx->getOption('yasmartcaptcha_service_js'));
-                    if(!empty($serviceJS)) {
+                    if (!empty($serviceJS)) {
                         $serviceJS = str_replace($placeholders['pl'], $placeholders['vl'], $serviceJS);
                         $this->modx->regClientHTMLBlock('<script src="' . $serviceJS . '" defer></script>');
                     }
@@ -69,18 +67,24 @@ class YaSmartCaptcha
         return true;
     }
 
+    public function enabled(): bool
+    {
+        return $this->enabled;
+    }
+
     /**
      * @param string $token
      * @return bool
      */
-    public function validateToken($token) {
-        if(empty($token)) {
+    public function validateToken($token)
+    {
+        if (empty($token)) {
             return false;
         }
 
         $secret = $this->modx->getOption('yasmartcaptcha_server_key');
 
-        if(empty($secret)) {
+        if (empty($secret)) {
             $this->modx->log(xPDO::LOG_LEVEL_ERROR, '[YaSmartCaptcha] System setting yasmartcaptcha_server_key is empty.');
             return false;
         }
@@ -94,7 +98,7 @@ class YaSmartCaptcha
         $useIP = $this->modx->getOption('yasmartcaptcha_send_user_ip', null, false);
 
         $ip = $this->getClientIp();
-        if($useIP && !empty($ip)) {
+        if ($useIP && !empty($ip)) {
             $args['ip'] = $ip;
         }
 
@@ -133,7 +137,8 @@ class YaSmartCaptcha
      * @param array $array
      * @return array|array[]
      */
-    private function makePlaceholders($array = []) {
+    private function makePlaceholders($array = [])
+    {
         $prefix = '[[+';
         $suffix = ']]';
         $result = ['pl' => [], 'vl' => []];
