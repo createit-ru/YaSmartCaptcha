@@ -2,6 +2,8 @@
 
 class YaSmartCaptcha
 {
+    private const VALIDATE_URL = "https://smartcaptcha.yandexcloud.net/validate";
+
     public modX $modx;
     private array $config;
     private array $initialized = [];
@@ -37,7 +39,7 @@ class YaSmartCaptcha
      *
      * @return bool
      */
-    public function initialize($ctx = 'web', $scriptProperties = array())
+    public function initialize(string $ctx = 'web', array $scriptProperties = []): bool
     {
         $this->config = array_merge($this->config, $scriptProperties);
         $this->config['ctx'] = $ctx;
@@ -51,11 +53,8 @@ class YaSmartCaptcha
                 break;
             default:
                 if (!defined('MODX_API_MODE') || !MODX_API_MODE) {
-                    $placeholders = $this->makePlaceholders($this->config);
-
                     $serviceJS = trim($this->modx->getOption('yasmartcaptcha_service_js'));
                     if (!empty($serviceJS)) {
-                        $serviceJS = str_replace($placeholders['pl'], $placeholders['vl'], $serviceJS);
                         $this->modx->regClientHTMLBlock('<script src="' . $serviceJS . '" defer></script>');
                     }
 
@@ -76,7 +75,7 @@ class YaSmartCaptcha
      * @param string $token
      * @return bool
      */
-    public function validateToken($token)
+    public function validateToken(string $token): bool
     {
         if (empty($token)) {
             return false;
@@ -89,7 +88,6 @@ class YaSmartCaptcha
             return false;
         }
 
-        $url = "https://smartcaptcha.yandexcloud.net/validate";
         $args = [
             "secret" => $secret,
             "token" => $token,
@@ -103,7 +101,7 @@ class YaSmartCaptcha
         }
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url . "?" . http_build_query($args));
+        curl_setopt($ch, CURLOPT_URL, self::VALIDATE_URL . "?" . http_build_query($args));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 1);
 
@@ -124,31 +122,10 @@ class YaSmartCaptcha
      *
      * @return string
      */
-    public function getClientIp()
+    public function getClientIp(): string
     {
         $this->modx->getRequest();
-        $ip = $this->modx->request->getClientIp();
-        return $ip['ip'];
+        $ipInfo = $this->modx->request->getClientIp();
+        return array_key_exists('ip', $ipInfo) ? $ipInfo['ip'] : '';
     }
-
-    /**
-     * Transform array to placeholders
-     *
-     * @param array $array
-     * @return array|array[]
-     */
-    private function makePlaceholders($array = [])
-    {
-        $prefix = '[[+';
-        $suffix = ']]';
-        $result = ['pl' => [], 'vl' => []];
-
-        foreach ($array as $k => $v) {
-            $result['pl'][$k] = $prefix . $k . $suffix;
-            $result['vl'][$k] = $v;
-        }
-
-        return $result;
-    }
-
 }
