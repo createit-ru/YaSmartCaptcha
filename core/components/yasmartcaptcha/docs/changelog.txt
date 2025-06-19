@@ -1,5 +1,8 @@
 Changelog for YaSmartCaptcha.
 
+1.0.3-pl
+- Fix a bug with makePlaceholders function (remove it:))
+
 1.0.2-pl
 - Add the global setting "yasmartcaptcha_enabled" to enable or disable the component
 

@@ -11,7 +11,7 @@ if (!defined('MODX_CORE_PATH')) {
 return [
     'name' => 'YaSmartCaptcha',
     'name_lower' => 'yasmartcaptcha',
-    'version' => '1.0.2',
+    'version' => '1.0.3',
     'release' => 'pl',
     // Install package to site right after build
     'install' => true,
