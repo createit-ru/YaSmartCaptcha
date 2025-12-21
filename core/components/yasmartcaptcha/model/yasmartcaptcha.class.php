@@ -2,7 +2,7 @@
 
 class YaSmartCaptcha
 {
-    private const VALIDATE_URL = "https://smartcaptcha.yandexcloud.net/validate";
+    private const VALIDATE_URL = "https://smartcaptcha.cloud.yandex.ru/validate";
 
     public modX $modx;
     private array $config;

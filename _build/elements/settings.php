@@ -8,7 +8,7 @@ return [
     ],
     'service_js' => [
         'xtype' => 'textfield',
-        'value' => 'https://smartcaptcha.yandexcloud.net/captcha.js',
+        'value' => 'https://smartcaptcha.cloud.yandex.ru/captcha.js',
         'area' => 'yasmartcaptcha_main',
     ],
     'client_key' => [

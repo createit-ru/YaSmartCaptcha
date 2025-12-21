@@ -27,7 +27,7 @@ https://yandex.cloud/ru/docs/smartcaptcha/quickstart
 
 Данный сниппет подключит на страницу (перед закрывающимся body) скрипт
 ```
-https://smartcaptcha.yandexcloud.net/captcha.js
+https://smartcaptcha.cloud.yandex.ru/captcha.js
 ```
 
 и добавит html блок с капчей.
