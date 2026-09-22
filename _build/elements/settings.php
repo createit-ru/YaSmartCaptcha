@@ -21,6 +21,11 @@ return [
         'value' => '',
         'area' => 'yasmartcaptcha_main',
     ],
+    'fail_open' => [
+        'xtype' => 'combo-boolean',
+        'value' => true,
+        'area' => 'yasmartcaptcha_main',
+    ],
     'send_user_ip' => [
         'xtype' => 'combo-boolean',
         'value' => false,

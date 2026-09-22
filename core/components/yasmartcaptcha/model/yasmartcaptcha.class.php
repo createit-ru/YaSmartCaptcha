@@ -72,12 +72,19 @@ class YaSmartCaptcha
     }
 
     /**
+     * Validates the token on the Yandex SmartCaptcha server.
+     *
+     * Network errors, timeouts and 5xx responses let the user pass (unless
+     * the yasmartcaptcha_fail_open setting is disabled), so an outage of the
+     * service does not block the forms. 4xx responses (e.g. a wrong server
+     * key) and negative verdicts always fail.
+     *
      * @param string $token
      * @return bool
      */
     public function validateToken(string $token): bool
     {
-        if (empty($token)) {
+        if ($token === '') {
             return false;
         }
 
@@ -89,32 +96,61 @@ class YaSmartCaptcha
         }
 
         $args = [
-            "secret" => $secret,
-            "token" => $token,
+            'secret' => $secret,
+            'token' => $token,
         ];
 
-        $useIP = $this->modx->getOption('yasmartcaptcha_send_user_ip', null, false);
-
-        $ip = $this->getClientIp();
-        if ($useIP && !empty($ip)) {
-            $args['ip'] = $ip;
+        if ($this->modx->getOption('yasmartcaptcha_send_user_ip', null, false)) {
+            $ip = $this->getClientIp();
+            if (!empty($ip)) {
+                $args['ip'] = $ip;
+            }
         }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, self::VALIDATE_URL . "?" . http_build_query($args));
+        $ch = curl_init(self::VALIDATE_URL);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($args));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 
-        $server_output = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $output = curl_exec($ch);
+        $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
         curl_close($ch);
 
+        if ($output === false || $httpCode >= 500) {
+            return $this->serviceUnavailable("code=$httpCode; error=$curlError; response=" . (string)$output);
+        }
         if ($httpCode !== 200) {
-            $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[YaSmartCaptcha] Allow access due to an error: code=$httpCode; message=$server_output");
+            $this->modx->log(xPDO::LOG_LEVEL_ERROR, "[YaSmartCaptcha] Validation request rejected: code=$httpCode; response=$output");
             return false;
         }
-        $resp = json_decode($server_output);
-        return ($resp->status === "ok");
+
+        $resp = json_decode($output);
+        if (!is_object($resp) || !isset($resp->status)) {
+            return $this->serviceUnavailable("invalid response: $output");
+        }
+        if ($resp->status !== 'ok') {
+            $message = $resp->message ?? '';
+            $this->modx->log(xPDO::LOG_LEVEL_INFO, "[YaSmartCaptcha] Validation failed: $message");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Handles a failure of the validation service according to the fail_open setting.
+     */
+    private function serviceUnavailable(string $details): bool
+    {
+        $failOpen = (bool)$this->modx->getOption('yasmartcaptcha_fail_open', null, true);
+        $this->modx->log(
+            $failOpen ? xPDO::LOG_LEVEL_WARN : xPDO::LOG_LEVEL_ERROR,
+            '[YaSmartCaptcha] Validation service error, ' . ($failOpen ? 'access allowed' : 'access denied') . ': ' . $details
+        );
+        return $failOpen;
     }
 
     /**

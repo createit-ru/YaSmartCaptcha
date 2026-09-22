@@ -1,5 +1,12 @@
 Changelog for YaSmartCaptcha.
 
+1.0.5-pl
+- Validation request is sent via POST, timeouts increased
+- Add the setting "yasmartcaptcha_fail_open" (allow access when the Yandex service is unavailable)
+- Validate service response and token type, log failure reasons
+- Fix captcha error text (no more "check the box")
+- Remove unused yasmartcaptcha_render.php snippet file
+
 1.0.4-pl
 - Update service address (https://smartcaptcha.yandexcloud.net => https://smartcaptcha.cloud.yandex.ru)
 

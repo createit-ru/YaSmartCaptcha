@@ -14,5 +14,8 @@ $_lang['setting_yasmartcaptcha_client_key_desc'] = 'Вы получите это
 $_lang['setting_yasmartcaptcha_server_key'] = 'Серверный ключ (server_key)';
 $_lang['setting_yasmartcaptcha_server_key_desc'] = 'Вы получите этот ключ после регистрации новой капчи в сервисе.';
 
+$_lang['setting_yasmartcaptcha_fail_open'] = 'Пропускать при недоступности сервиса';
+$_lang['setting_yasmartcaptcha_fail_open_desc'] = 'Если сервис проверки Яндекса не отвечает или возвращает ошибку 5xx, пропускать пользователя. Иначе форма будет отклонена.';
+
 $_lang['setting_yasmartcaptcha_send_user_ip'] = 'Передавать IP пользователя в Яндекс';
 $_lang['setting_yasmartcaptcha_send_user_ip_desc'] = 'Передавать IP адрес пользователей сервисам Яндекса. Это не обязательно, но помогает улучшить качество работы SmartCaptcha. Убедитесь, что это не нарушит законодательство вашей страны.';

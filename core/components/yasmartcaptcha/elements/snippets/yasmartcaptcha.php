@@ -22,17 +22,20 @@ if ((isset($formit) || isset($login)) && isset($hook)) {
     // FormIt hook
     $modx->lexicon->load('yasmartcaptcha:default');
 
+    $addErrors = static function (string $key) use ($hook, $modx) {
+        $hook->addError('smart-token', $modx->lexicon($key));
+        $hook->addError('yasmartcaptcha', $modx->lexicon($key));
+    };
+
     $token = $hook->getValue('smart-token');
-    if (empty($token)) {
-        $hook->addError('smart-token', $modx->lexicon('yasmartcaptcha_token_empty'));
-        $hook->addError('yasmartcaptcha', $modx->lexicon('yasmartcaptcha_token_empty'));
+    if (!is_string($token) || $token === '') {
+        $addErrors('yasmartcaptcha_token_empty');
         return false;
     }
 
     $validationResult = $YaSmartCaptcha->validateToken($token);
     if ($validationResult !== true) {
-        $hook->addError('smart-token', $modx->lexicon('yasmartcaptcha_validate_failed'));
-        $hook->addError('yasmartcaptcha', $modx->lexicon('yasmartcaptcha_validate_failed'));
+        $addErrors('yasmartcaptcha_validate_failed');
     }
     return $validationResult;
 } else {
