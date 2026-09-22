@@ -11,6 +11,11 @@ return [
         'value' => 'https://smartcaptcha.cloud.yandex.ru/captcha.js',
         'area' => 'yasmartcaptcha_main',
     ],
+    'invisible' => [
+        'xtype' => 'combo-boolean',
+        'value' => false,
+        'area' => 'yasmartcaptcha_main',
+    ],
     'client_key' => [
         'xtype' => 'textfield',
         'value' => '',

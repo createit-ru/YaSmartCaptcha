@@ -54,10 +54,16 @@ class YaSmartCaptcha
             default:
                 if (!defined('MODX_API_MODE') || !MODX_API_MODE) {
                     $serviceJS = trim($this->modx->getOption('yasmartcaptcha_service_js'));
+                    if ($this->invisible()) {
+                        // Our script must go first: the Yandex script calls YaSmartCaptchaInit when it is loaded.
+                        $this->modx->regClientHTMLBlock('<script src="' . $this->config['jsUrl'] . 'yasmartcaptcha.js" defer></script>');
+                        if (!empty($serviceJS)) {
+                            $serviceJS .= (strpos($serviceJS, '?') === false ? '?' : '&') . 'render=onload&onload=YaSmartCaptchaInit';
+                        }
+                    }
                     if (!empty($serviceJS)) {
                         $this->modx->regClientHTMLBlock('<script src="' . $serviceJS . '" defer></script>');
                     }
-
                 }
                 $this->initialized[$ctx] = true;
                 break;
@@ -69,6 +75,11 @@ class YaSmartCaptcha
     public function enabled(): bool
     {
         return $this->enabled;
+    }
+
+    public function invisible(): bool
+    {
+        return (bool)$this->modx->getOption('yasmartcaptcha_invisible', null, false);
     }
 
     /**

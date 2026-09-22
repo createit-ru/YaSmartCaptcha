@@ -1,5 +1,9 @@
 Changelog for YaSmartCaptcha.
 
+1.1.0-pl
+- Add support for the invisible captcha: the setting "yasmartcaptcha_invisible", the chunk "tpl.YaSmartCaptcha.Invisible" and the JS API (YaSmartCaptcha.execute / reset)
+- The default value of the snippet property "tpl" is now empty (the chunk is chosen by the invisible setting)
+
 1.0.5-pl
 - Validation request is sent via POST, timeouts increased
 - Add the setting "yasmartcaptcha_fail_open" (allow access when the Yandex service is unavailable)

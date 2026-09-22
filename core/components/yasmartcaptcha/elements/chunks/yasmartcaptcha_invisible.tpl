@@ -1,0 +1,1 @@
+<div data-yasmartcaptcha data-sitekey="[[+client_key]]"></div>

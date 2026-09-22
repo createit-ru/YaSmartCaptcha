@@ -8,6 +8,9 @@ $_lang['setting_yasmartcaptcha_enabled_desc'] = 'Вы можете глобал�
 $_lang['setting_yasmartcaptcha_service_js'] = 'JS-скрипт сервиса Yandex SmartCaptcha';
 $_lang['setting_yasmartcaptcha_service_js_desc'] = 'Компонент подключит этот скрипт на страницу. Если подключаете вручную - очистите это поле.';
 
+$_lang['setting_yasmartcaptcha_invisible'] = 'Невидимая капча';
+$_lang['setting_yasmartcaptcha_invisible_desc'] = 'Использовать невидимую капчу (без кнопки «Я не робот»). Проверку нужно запускать из JS вашего сайта: YaSmartCaptcha.execute(form). Подробности в README.';
+
 $_lang['setting_yasmartcaptcha_client_key'] = 'Клиентский ключ (client_key)';
 $_lang['setting_yasmartcaptcha_client_key_desc'] = 'Вы получите этот ключ после регистрации новой капчи в сервисе.';
 

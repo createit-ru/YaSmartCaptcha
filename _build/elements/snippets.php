@@ -7,7 +7,7 @@ return [
         'properties' => [
             'tpl' => [
                 'type' => 'textfield',
-                'value' => 'tpl.YaSmartCaptcha',
+                'value' => '',
             ]
         ],
     ],

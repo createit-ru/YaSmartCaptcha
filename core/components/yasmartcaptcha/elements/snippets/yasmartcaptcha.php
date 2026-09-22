@@ -44,7 +44,10 @@ if ((isset($formit) || isset($login)) && isset($hook)) {
         return '';
     }
     $YaSmartCaptcha->initialize($modx->context->get('key'), $scriptProperties);
-    $tpl = $modx->getOption('tpl', $scriptProperties, 'tpl.YaSmartCaptcha');
+    $tpl = $modx->getOption('tpl', $scriptProperties, '');
+    if ($tpl === '') {
+        $tpl = $YaSmartCaptcha->invisible() ? 'tpl.YaSmartCaptcha.Invisible' : 'tpl.YaSmartCaptcha';
+    }
     return $modx->getChunk($tpl, [
         'client_key' => $modx->getOption('yasmartcaptcha_client_key')
     ]);
